@@ -8,3 +8,7 @@ super-linter.log*
 
 // Ignore general files
 .DS_Store
+
+*.csr
+*.srl
+*.pem
