@@ -13,4 +13,4 @@ super-linter.log*
 *.srl
 *.pem
 *.cnf
-
+*.tflite
