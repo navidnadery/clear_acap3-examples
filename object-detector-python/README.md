@@ -18,6 +18,10 @@ object-detector-python
 ├── app
 │   ├── detector.py
 │   └── sample.jpg
+|── model
+|   |── COPYRIGHT
+|   |── coco_labels.txt
+|   |── ssd_mobilenet_v2_quantized.tflite
 ├── docker-compose.yml
 ├── static-image.yml
 ├── Dockerfile
@@ -119,6 +123,12 @@ scp -r models $DEVICE_IP:/root/
 ```
 
 ## Run dockers using docker-compose file
+Set tflite model path in docker
+
+```bash
+export MODEL_PATH=/models/quantized_ssdtfmodelf.tflite
+```
+
 Run one of the docker-compose files
 
 1- Inference on Video Stream
