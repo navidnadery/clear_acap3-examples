@@ -43,8 +43,8 @@ Meet the following requirements to ensure compatibility with the example:
 * Computer
   * Either [Docker Desktop](https://docs.docker.com/desktop/) version 4.11.1 or higher, or [Docker Engine](https://docs.docker.com/engine/) version 20.10.17 or higher with BuildKit enabled using Docker Compose version 1.29.2 or higher
 
-### ACAP TLS SD
-#### INSTALL Docker ACAP
+## ACAP TLS SD
+### INSTALL Docker ACAP
 Check Docker ACAP compatibility:
 
 ```
@@ -65,6 +65,7 @@ docker run --rm axisecp/docker-acap:latest-$ARCH $DEVICE_IP $DEVICE_PASSWORD ins
 
 Generate TLS and copy to Device dockerd
 ```
+rm *.pem *.csr *.srl *.cnf
 openssl genrsa -aes256 -out ca-key.pem 4096
 openssl req -new -x509 -days 365 -key ca-key.pem -sha256 -out ca.pem
 openssl genrsa -out server-key.pem 4096
@@ -102,6 +103,7 @@ docker --tlsverify --tlscacert=ca.pem --tlscert=cert.pem --tlskey=key.pem  --hos
 curl -s --anyauth -u "root:$DEVICE_PASSWORD"   "http://$DEVICE_IP/axis-cgi/param.cgi?action=update&root.dockerdwrapper.SDCardSupport=yes"
 ```
 
+## Load docker Images to camera
 Restart the APP, then load docker images
 ```
 docker save $APP_NAME | docker --tlsverify --tlscacert=ca.pem --tlscert=cert.pem --tlskey=key.pem --host tcp://$DEVICE_IP:$DOCKER_PORT load
@@ -109,6 +111,7 @@ docker save $MODEL_NAME | docker --tlsverify --tlscacert=ca.pem --tlscert=cert.p
 docker save axisecp/acap-runtime:1.1.2-$ARCH-containerized | docker --tlsverify --tlscacert=ca.pem --tlscert=cert.pem --tlskey=key.pem --host tcp://$DEVICE_IP:$DOCKER_PORT load
 ```
 
+## Run dockers using docker-compose file
 Run one of the docker-compose files
 
 1- Inference on Video Stream
