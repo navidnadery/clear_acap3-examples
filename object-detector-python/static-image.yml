@@ -13,13 +13,14 @@ services:
       - INFERENCE_PORT=0
       - MODEL_PATH=${MODEL_PATH}
       - OBJECT_LIST_PATH=/models/coco_labels.txt
-      - IMAGE_PATH=dog416.png
+      - IMAGE_PATH=/app/sample.jpg
     volumes:
       - /usr/lib/libvdostream.so.1:/usr/lib/libvdostream.so.1
-      - acap_dl-models:/models:ro
+      - /root/models:/models:ro
       - /tmp:/output
       - /var/run/dbus:/var/run/dbus:rw
       - inference-server:/tmp
+      - /root/app:/app
 
   inference-server:
     image: ${INFERENCE_SERVER_IMAGE}
@@ -28,22 +29,16 @@ services:
       options:
         max-file: "5"
         max-size: "100k"
-    entrypoint: ["/opt/app/acap_runtime/acapruntime", "-o", "-m", "${MODEL_PATH}", "-j", "${INFERENCE_CHIP}"]
+    entrypoint: ["/opt/app/acap_runtime/acapruntime", "-m", "${MODEL_PATH}", "-j", "${INFERENCE_CHIP}"]
     volumes:
       - /usr/acap-root/lib:/host/lib
-      - acap_dl-models:/models:ro
       - /run/dbus/system_bus_socket:/run/dbus/system_bus_socket
       - /run/parhand/parhandsocket:/run/parhand/parhandsocket
       - /usr/lib:/usr/lib
       - /usr/bin:/usr/bin
       - inference-server:/tmp
-
-  acap_dl-models:
-    image: ${MODEL_NAME}
-    volumes:
-      - acap_dl-models:/models
+      - /root/models:/models:ro
 
 volumes:
-  acap_dl-models: {}
   inference-server: {}
 
