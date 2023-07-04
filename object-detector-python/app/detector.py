@@ -40,8 +40,12 @@ class Detector:
         success, result = self.inference_client.infer({'data': image}, self.model_path)
         if not success:
             return False, 0, 0, 0
-        bounding_boxes, classes, confidences = tuple([np.squeeze(result[key]) for key in [
-            'TFLite_Detection_PostProcess', 'TFLite_Detection_PostProcess:1', 'TFLite_Detection_PostProcess:2']])
+        print("result")
+        print(list(result.keys()))
+        confidences, classes, bounding_boxes   = tuple([np.squeeze(result[key]) for key in ['StatefulPartitionedCall:1', 'StatefulPartitionedCall:2', 'StatefulPartitionedCall:3']])
+        print(confidences)
+        print(bounding_boxes)
+        print(classes)
 
         for i, confidence in enumerate(confidences):
             if confidence < self.threshold:
@@ -56,8 +60,8 @@ class Detector:
     def read_object_list(self, object_list_path):
         self.object_list = {}
         self.detection_type = 'Objects'
-        for row in open(object_list_path, 'r'):
-            (classID, label) = row.strip().split(" ", maxsplit=1)
+        for i, row in enumerate(open(object_list_path, 'r')):
+            (classID, label) = i, row.strip().split(" ", maxsplit=1)[0]
             label = label.strip().split(",", maxsplit=1)[0]
             self.object_list[int(classID)] = label
 
@@ -106,7 +110,7 @@ class Detector:
     def run_camera_source(self):
         cap = cv2.VideoCapture(1)
         cap.set(cv2.CAP_PROP_FPS, 5)
-        cap.set(cv2.CAP_PROP_FRAME_WIDTH, 480)
+        cap.set(cv2.CAP_PROP_FRAME_WIDTH, 320)
         cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 320)
         cap.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc(*"RGB3"))
         while True:
