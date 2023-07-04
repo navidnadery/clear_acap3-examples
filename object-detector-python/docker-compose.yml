@@ -15,7 +15,7 @@ services:
       - OBJECT_LIST_PATH=/models/coco_labels.txt
     volumes:
       - /usr/lib/libvdostream.so.1:/usr/lib/libvdostream.so.1
-      - acap_dl-models:/models:ro
+      - /root/models:/models:ro
       - /tmp:/output
       - /var/run/dbus:/var/run/dbus:rw
       - inference-server:/tmp
@@ -30,19 +30,12 @@ services:
     entrypoint: ["/opt/app/acap_runtime/acapruntime", "-o", "-m", "${MODEL_PATH}", "-j", "${INFERENCE_CHIP}"]
     volumes:
       - /usr/acap-root/lib:/host/lib
-      - acap_dl-models:/models:ro
       - /run/dbus/system_bus_socket:/run/dbus/system_bus_socket
       - /run/parhand/parhandsocket:/run/parhand/parhandsocket
       - /usr/lib:/usr/lib
       - /usr/bin:/usr/bin
       - inference-server:/tmp
 
-  acap_dl-models:
-    image: ${MODEL_NAME}
-    volumes:
-      - acap_dl-models:/models
-
 volumes:
-  acap_dl-models: {}
   inference-server: {}
 
