@@ -12,3 +12,5 @@ super-linter.log*
 *.csr
 *.srl
 *.pem
+*.cnf
+
